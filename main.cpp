@@ -21,11 +21,18 @@ int main() {
     data[0] = 0x00;  // now change the register to the wiper register
     data[1] = 0;  //we will start with a wiper value of 0 to set VRW=0
     digitalPot.write(addr8bit, data, 2);  
-    delay(10000); //hold it here for 10 seconds so we can measure it
     while (true) {
+        for (int VRW = 0; VRW < 64; VRW++){
+            if (VRW < 63){
+                data[1] = VRW;
+                digitalPot.write(addr8bit, data, 2); //write the 64 value to WR
+            } 
+        }
+        for (int VRW = 63; VRW > 0; VRW--){
+            data[1] = VRW;
+            digitalPot.write(addr8bit, data, 2); //write the 64 value to WR
+        }
     //now we will change the wiper value to 128/2 to get VRW of 3.3/2V  (about 1.65V)
-        data[1] = 64;
-        digitalPot.write(addr8bit, data, 2); //write the 64 value to WR
         delay(TIME_INCREMENT_MS);
     }
 }
